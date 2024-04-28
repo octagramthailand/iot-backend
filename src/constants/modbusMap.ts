@@ -1,15 +1,15 @@
 export const modbusMapping = {
-  currentDC: {
-    address: 32017,
-    quantity: 1,
-    index: 0,
-    decimal: 2,
-  },
   voltageDC: {
-    address: 32016,
+    address: 32018,
     quantity: 1,
     index: 0,
     decimal: 1,
+  },
+  currentDC: {
+    address: 32019,
+    quantity: 1,
+    index: 0,
+    decimal: 2,
   },
   tempInverter: {
     address: 32087,
@@ -49,6 +49,12 @@ export const modbusMapping = {
   },
   currentL3: {
     address: 32076,
+    quantity: 2,
+    index: 1,
+    decimal: 3,
+  },
+  powerInverter: {
+    address: 32080,
     quantity: 2,
     index: 1,
     decimal: 3,
