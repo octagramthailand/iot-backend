@@ -1,6 +1,7 @@
 export const modbusMapping = {
   voltageDC: {
-    address: 32018,
+    // address: 32018,
+    address: 3000,
     quantity: 1,
     index: 0,
     decimal: 1,

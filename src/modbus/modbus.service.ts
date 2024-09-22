@@ -25,13 +25,10 @@ export class ModbusService implements OnModuleInit {
 
   private async connect() {
     try {
-      await this.client.connectRTUBuffered(
-        '/dev/tty.usbserial-120',
-        this.connectionOptions,
-      );
+      await this.client.connectRTUBuffered('COM4', this.connectionOptions);
       this.client.setID(1); // Set your slave ID
       console.log('connected');
-      await this.setupAutoFetch();
+      // await this.setupAutoFetch();
     } catch (error) {
       console.error('Modbus RTU connection error:', error);
     }
@@ -81,100 +78,100 @@ export class ModbusService implements OnModuleInit {
 
       // Attempt to fetch data and race it against the timeout
       const data = (await Promise.race([
-        this.client.readHoldingRegisters(address, quantity),
+        this.client.readHoldingRegisters(3003, quantity),
         timeoutPromise,
       ])) as ReadRegisterResult;
-
       console.log(data);
 
-      await this.eventsGateway.sendToDashboard({
-        type: type,
-        value: Number(data.data[index]) / Math.pow(10, decimal),
-        time: new Date().getTime(),
-      });
+      // await this.eventsGateway.sendToDashboard({
+      //   type: type,
+      //   value: Number(data.data[index]) / Math.pow(10, decimal),
+      //   time: new Date().getTime(),
+      // });
     } catch (error) {
+      console.log('second');
       console.error('Error fetching current value:', error);
       // throw error;
     }
   }
 
-  private async setupAutoFetch() {
-    // // Function to pause execution for a given duration
-    // const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  // private async setupAutoFetch() {
+  //   // // Function to pause execution for a given duration
+  //   // const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-    // while (true) {
-    //   for (let key in modbusMapping) {
-    //     await this.fetchCurrentValue(
-    //       modbusMapping[key].address,
-    //       modbusMapping[key].quantity,
-    //       key,
-    //       modbusMapping[key].index,
-    //       modbusMapping[key].decimal,
-    //     );
-    //     console.log('first');
-    //   }
-    //   // Wait for 1 second before starting the next cycle
-    //   // await sleep(1000);
-    // }
-    // for (let key in modbusMapping) {
-    //   await this.fetchCurrentValue(
-    //     modbusMapping[key].address,
-    //     modbusMapping[key].quantity,
-    //     key,
-    //     modbusMapping[key].index,
-    //     modbusMapping[key].decimal,
-    //   );
-    //   console.log('first');
-    // }
-    // for (let key in modbusMapping) {
-    //   await this.fetchCurrentValue(
-    //     modbusMapping[key].address,
-    //     modbusMapping[key].quantity,
-    //     key,
-    //     modbusMapping[key].index,
-    //     modbusMapping[key].decimal,
-    //   );
-    // }
-    // setInterval(async () => {
-    //   for (let key in modbusMapping) {
-    //     await this.fetchCurrentValue(
-    //       modbusMapping[key].address,
-    //       modbusMapping[key].quantity,
-    //       key,
-    //       modbusMapping[key].index,
-    //       modbusMapping[key].decimal,
-    //     );
-    //   }
-    // }, 2000); // 60000 ms = 1 minute
-    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    for (let key in modbusMapping) {
-      // await this.fetchCurrentValue(
-      //   modbusMapping[key].address,
-      //   modbusMapping[key].quantity,
-      //   key,
-      //   modbusMapping[key].index,
-      //   modbusMapping[key].decimal,
-      // );
-      this.infinityFetch(key);
-      await sleep(100);
-    }
-  }
+  //   // while (true) {
+  //   //   for (let key in modbusMapping) {
+  //   //     await this.fetchCurrentValue(
+  //   //       modbusMapping[key].address,
+  //   //       modbusMapping[key].quantity,
+  //   //       key,
+  //   //       modbusMapping[key].index,
+  //   //       modbusMapping[key].decimal,
+  //   //     );
+  //   //     console.log('first');
+  //   //   }
+  //   //   // Wait for 1 second before starting the next cycle
+  //   //   // await sleep(1000);
+  //   // }
+  //   // for (let key in modbusMapping) {
+  //   //   await this.fetchCurrentValue(
+  //   //     modbusMapping[key].address,
+  //   //     modbusMapping[key].quantity,
+  //   //     key,
+  //   //     modbusMapping[key].index,
+  //   //     modbusMapping[key].decimal,
+  //   //   );
+  //   //   console.log('first');
+  //   // }
+  //   // for (let key in modbusMapping) {
+  //   //   await this.fetchCurrentValue(
+  //   //     modbusMapping[key].address,
+  //   //     modbusMapping[key].quantity,
+  //   //     key,
+  //   //     modbusMapping[key].index,
+  //   //     modbusMapping[key].decimal,
+  //   //   );
+  //   // }
+  //   // setInterval(async () => {
+  //   //   for (let key in modbusMapping) {
+  //   //     await this.fetchCurrentValue(
+  //   //       modbusMapping[key].address,
+  //   //       modbusMapping[key].quantity,
+  //   //       key,
+  //   //       modbusMapping[key].index,
+  //   //       modbusMapping[key].decimal,
+  //   //     );
+  //   //   }
+  //   // }, 2000); // 60000 ms = 1 minute
+  //   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  //   for (let key in modbusMapping) {
+  //     // await this.fetchCurrentValue(
+  //     //   modbusMapping[key].address,
+  //     //   modbusMapping[key].quantity,
+  //     //   key,
+  //     //   modbusMapping[key].index,
+  //     //   modbusMapping[key].decimal,
+  //     // );
+  //     this.infinityFetch(key);
+  //     await sleep(100);
+  //   }
+  // }
 
-  private async infinityFetch(key: string) {
-    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  // private async infinityFetch(key: string) {
+  //   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-    while (true) {
-      console.log('fetching', key);
-      await this.fetchCurrentValue(
-        modbusMapping[key].address,
-        modbusMapping[key].quantity,
-        key,
-        modbusMapping[key].index,
-        modbusMapping[key].decimal,
-      );
-      // Wait for 1 second before starting the next cycle
-      // console.log('first');
-      await sleep(1000);
-    }
-  }
+  //   while (true) {
+  //     console.log('fetching', key);
+  //     await this.fetchCurrentValue(
+  //       modbusMapping[key].address,
+  //       modbusMapping[key].quantity,
+  //       key,
+  //       modbusMapping[key].index,
+  //       modbusMapping[key].decimal,
+  //     );
+  //     // Wait for 1 second before starting the next cycle
+  //     // console.log('first');
+  //     await sleep(1000);
+  //   }
+  // }
 }

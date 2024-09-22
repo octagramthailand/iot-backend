@@ -18,6 +18,7 @@ export class AppController {
 
   @Get('/modbus')
   async getData(@Query() data: { type: string }, @Res() res: Response) {
+    console.log('first');
     console.log('data.type', data.type);
     this.modbusService.fetchCurrentValue(
       modbusMapping[data.type].address,
