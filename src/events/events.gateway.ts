@@ -14,16 +14,16 @@ export class EventsGateway {
   @WebSocketServer() server: Server;
 
   @SubscribeMessage('message')
-  handleMessage(client: any, payload: any): void {
+  async handleMessage(client: any, payload: any) {
     console.log(payload);
-    this.sendToDashboard({
+    await this.sendToDashboard({
       type: 'voltageDC',
       value: payload,
       time: new Date().getTime(),
     });
   }
 
-  sendToDashboard(data: any) {
+  async sendToDashboard(data: any) {
     this.server.emit('sendToReact', data);
   }
 }
